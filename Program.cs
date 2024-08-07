@@ -3,8 +3,16 @@
 var license1 = new TwoDaysLicense("Secret Life of Pets", now);
 var license2 = new LifeLongLicense("Matrix", now);
 
+
+
 PrintLicenseDetails(license1);
 PrintLicenseDetails(license2);
+
+var license3 = new MilitaryLifeLongLicense("Secret Life of Pets", now);
+var license4 = new SeniorCitizenTwoDaysLicense("Matrix", now);
+
+PrintLicenseDetails(license3);
+PrintLicenseDetails(license4);
 
 Console.ReadKey();
 
