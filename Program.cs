@@ -1,15 +1,14 @@
 ﻿DateTime now = DateTime.Now;
+var noDiscount = new NoDiscount();
 
-var license1 = new TwoDaysLicense("Secret Life of Pets", now);
-var license2 = new LifeLongLicense("Matrix", now);
-
-
+var license1 = new TwoDaysLicense("Secret Life of Pets", now, noDiscount);
+var license2 = new LifeLongLicense("Matrix", now, noDiscount);
 
 PrintLicenseDetails(license1);
 PrintLicenseDetails(license2);
 
-var license3 = new MilitaryLifeLongLicense("Secret Life of Pets", now);
-var license4 = new SeniorCitizenTwoDaysLicense("Matrix", now);
+var license3 = new LifeLongLicense("Secret Life of Pets", now, new MilitaryDiscount());
+var license4 = new TwoDaysLicense("Matrix", now, new SeniorCitizenDiscount());
 
 PrintLicenseDetails(license3);
 PrintLicenseDetails(license4);

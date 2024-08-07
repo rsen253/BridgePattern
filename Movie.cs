@@ -2,97 +2,46 @@
 {
     public string Movie { get; }
     public DateTime PurchaseTime { get; }
+    private readonly Discount _discount;
 
-    protected MovieLicense(string movie, DateTime purchaseTime)
+    protected MovieLicense(string movie, DateTime purchaseTime, Discount discount)
     {
         Movie = movie;
         PurchaseTime = purchaseTime;
+        _discount = discount;
     }
 
-    public abstract decimal GetPrice();
+    public decimal GetPrice()
+    {
+        int discount = _discount.GetDiscount();
+        decimal multiplier = 1 - discount / 100m;
+        return GetPriceCore() * multiplier;
+    }
+
+    protected abstract decimal GetPriceCore();
     public abstract DateTime? GetExpirationDate();
 }
 
 public class TwoDaysLicense : MovieLicense
 {
-    public TwoDaysLicense(string movie, DateTime purchaseTime)
-        : base(movie, purchaseTime)
+    public TwoDaysLicense(string movie, DateTime purchaseTime, Discount discount)
+        : base(movie, purchaseTime, discount)
     {
     }
 
-    public override decimal GetPrice()
-    {
-        return 4;
-    }
+    protected override decimal GetPriceCore() => 4;
 
-    public override DateTime? GetExpirationDate()
-    {
-        return PurchaseTime.AddDays(2);
-    }
-}
-
-public class MilitaryTwoDaysLicense : TwoDaysLicense
-{
-    public MilitaryTwoDaysLicense(string movie, DateTime purchaseTime) : base(movie, purchaseTime)
-    {
-    }
-
-    public override decimal GetPrice()
-    {
-        return base.GetPrice() * 0.9m;
-    }
-}
-
-public class SeniorCitizenTwoDaysLicense : TwoDaysLicense
-{
-    public SeniorCitizenTwoDaysLicense(string movie, DateTime purchaseTime) : base(movie, purchaseTime)
-    {
-    }
-
-    public override decimal GetPrice()
-    {
-        return base.GetPrice() * 0.8m;
-    }
+    public override DateTime? GetExpirationDate() => PurchaseTime.AddDays(2);
 }
 
 public class LifeLongLicense : MovieLicense
 {
-    public LifeLongLicense(string movie, DateTime purchaseTime)
-        : base(movie, purchaseTime)
+    public LifeLongLicense(string movie, DateTime purchaseTime, Discount discount)
+        : base(movie, purchaseTime, discount)
     {
     }
 
-    public override decimal GetPrice()
-    {
-        return 8;
-    } 
+    protected override decimal GetPriceCore() => 8;
 
-    public override DateTime? GetExpirationDate()
-    {
-        return null;
-    }
-}
-
-public class MilitaryLifeLongLicense : LifeLongLicense
-{
-    public MilitaryLifeLongLicense(string movie, DateTime purchaseTime) : base(movie, purchaseTime)
-    {
-    }
-
-    public override decimal GetPrice()
-    {
-        return base.GetPrice() * 0.9m;
-    }
-}
-
-public class SeniorCitizenLifeLongLicense : LifeLongLicense
-{
-    public SeniorCitizenLifeLongLicense(string movie, DateTime purchaseTime) : base(movie, purchaseTime)
-    {
-    }
-
-    public override decimal GetPrice()
-    {
-        return base.GetPrice() * 0.8m;
-    }
+    public override DateTime? GetExpirationDate() => null;
 }
